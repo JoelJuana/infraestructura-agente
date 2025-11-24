@@ -1,7 +1,5 @@
 # versions.tf
 
-# Define la versión mínima de Terraform y los proveedores requeridos.
-
 terraform {
   required_version = ">= 1.5.0"
 
@@ -11,9 +9,13 @@ terraform {
       version = "~> 5.0"
     }
   }
+
+  backend "gcs" {
+    bucket  = "terraform-state-bucket" # UPDATE THIS with your actual state bucket
+    prefix  = "terraform/state"
+  }
 }
 
-# Configuración del proveedor de Google Cloud
 provider "google" {
   project = var.project_id
   region  = var.region

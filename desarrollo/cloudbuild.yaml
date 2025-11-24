@@ -1,0 +1,54 @@
+steps:
+  # 1. Build Backend Image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'europe-southwest1-docker.pkg.dev/$PROJECT_ID/adk-dev-repo/backend:latest', './backend']
+    id: 'Build Backend'
+
+  # 2. Push Backend Image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'europe-southwest1-docker.pkg.dev/$PROJECT_ID/adk-dev-repo/backend:latest']
+    id: 'Push Backend'
+
+  # 3. Build Frontend Image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'europe-southwest1-docker.pkg.dev/$PROJECT_ID/adk-dev-repo/frontend:latest', './frontend']
+    id: 'Build Frontend'
+
+  # 4. Push Frontend Image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'europe-southwest1-docker.pkg.dev/$PROJECT_ID/adk-dev-repo/frontend:latest']
+    id: 'Push Frontend'
+
+  # 5. Apply Terraform (Optional - usually done separately or with specific trigger)
+  # For now, we assume Terraform is applied manually or via a separate pipeline.
+  # This pipeline focuses on Application Deployment.
+
+  # 6. Deploy Backend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'adk-dev-svc-backend'
+      - '--image'
+      - 'europe-southwest1-docker.pkg.dev/$PROJECT_ID/adk-dev-repo/backend:latest'
+      - '--region'
+      - 'europe-southwest1'
+    id: 'Deploy Backend'
+
+  # 7. Deploy Frontend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'adk-dev-svc-frontend'
+      - '--image'
+      - 'europe-southwest1-docker.pkg.dev/$PROJECT_ID/adk-dev-repo/frontend:latest'
+      - '--region'
+      - 'europe-southwest1'
+    id: 'Deploy Frontend'
+
+images:
+  - 'europe-southwest1-docker.pkg.dev/$PROJECT_ID/adk-dev-repo/backend:latest'
+  - 'europe-southwest1-docker.pkg.dev/$PROJECT_ID/adk-dev-repo/frontend:latest'

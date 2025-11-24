@@ -3,6 +3,11 @@
 # --------------------------------------------------------------------------------------
 # 1. VARIABLES BÁSICAS DEL PROYECTO
 # --------------------------------------------------------------------------------------
+# variables.tf
+
+# --------------------------------------------------------------------------------------
+# 1. VARIABLES BÁSICAS DEL PROYECTO
+# --------------------------------------------------------------------------------------
 
 variable "project_id" {
   description = "ID del proyecto de Google Cloud."
@@ -12,7 +17,7 @@ variable "project_id" {
 variable "region" {
   description = "Región principal de GCP."
   type        = string
-  default     = "us-central1"
+  default     = "europe-southwest1"
 }
 
 variable "application_name" {
@@ -81,6 +86,7 @@ variable "agent_backend_config" {
     memory = string
     timeout_seconds = number
     concurrency = number
+    min_instances = number
   })
   default = {
     name = "backend" 
@@ -89,5 +95,6 @@ variable "agent_backend_config" {
     memory = "2Gi"
     timeout_seconds = 600
     concurrency = 50
+    min_instances = 0
   }
 }
