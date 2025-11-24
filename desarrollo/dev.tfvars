@@ -6,7 +6,7 @@
 # --------------------------------------------------------------------------------------
 
 project_id = "adk-proyecto-desarrollo-999" 
-region     = "us-central1" 
+region     = "europe-southwest1" 
 application_name = "adk" 
 application_display_name = "Agente de Conocimiento ADK"
 environment = "dev" # Prefijo resultante: adk-dev
@@ -16,7 +16,7 @@ environment = "dev" # Prefijo resultante: adk-dev
 # --------------------------------------------------------------------------------------
 
 sa_account_id = "adk-dev-processor-sa" 
-firestore_location_id = "nam5" 
+firestore_location_id = "eur3" 
 rag_index_dimensions = 768
 
 # --------------------------------------------------------------------------------------
@@ -25,11 +25,12 @@ rag_index_dimensions = 768
 
 agent_backend_config = {
     name = "backend"
-    image = "gcr.io/adk-proyecto-desarrollo-999/adk-agent:dev" # Imagen DEV
+    image = "europe-southwest1-docker.pkg.dev/adk-proyecto-desarrollo-999/adk-repo/backend:latest" # Updated image path for Artifact Registry
     cpu = 1                 
     memory = "1Gi"          # Baja capacidad
     timeout_seconds = 300   
     concurrency = 10        # Baja concurrencia
+    min_instances = 0
 }
 
 # --------------------------------------------------------------------------------------

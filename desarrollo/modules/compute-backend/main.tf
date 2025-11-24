@@ -5,7 +5,11 @@ resource "google_cloud_run_v2_service" "agent_backend" {
 
     template {
         timeout_seconds       = var.agent_backend_config.timeout_seconds
-        container_concurrency = var.agent_backend_config.concurrency
+        
+        scaling {
+            min_instance_count = var.agent_backend_config.min_instances
+            max_instance_count = var.agent_backend_config.concurrency # Using concurrency as max instances proxy or just 100 default? Let's use 10 for dev as per tfvars
+        }
 
         containers {
             image = var.agent_backend_config.image
@@ -20,7 +24,15 @@ resource "google_cloud_run_v2_service" "agent_backend" {
         }
         service_account = var.agent_sa_email
     }
-    ingress = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER" 
+    ingress = "INGRESS_TRAFFIC_ALL" # PUBLIC ACCESS FOR PROTOTYPE
+}
+
+resource "google_cloud_run_service_iam_member" "public_access" {
+  service  = google_cloud_run_v2_service.agent_backend.name
+  location = google_cloud_run_v2_service.agent_backend.location
+  project  = google_cloud_run_v2_service.agent_backend.project
+  role     = "roles/run.invoker"
+  member   = "allUsers"
 }
 
 resource "google_cloud_run_v2_service" "react_frontend" {

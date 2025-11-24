@@ -19,3 +19,11 @@
 *   La estructura ahora es escalable y mantenible.
 *   La separación de responsabilidades permite cambios aislados en componentes específicos sin riesgo de afectar a toda la infraestructura.
 *   La validación de seguridad está integrada en la configuración de producción.
+
+### 🇪🇸 Optimización Prototipo España (v0.2.0)
+*   **Región:** Migración completa a `europe-southwest1` (Madrid) para reducir latencia.
+*   **Acceso Público:** Se ha habilitado `INGRESS_TRAFFIC_ALL` y el rol `roles/run.invoker` para `allUsers` en el Backend.
+    *   *Motivo:* Permitir conexión directa desde el Frontend (navegador) sin Load Balancer (ahorro de costes).
+*   **Coste Cero:** Configuración explícita de `min_instances = 0` para escalar a cero cuando no hay uso.
+*   **CI/CD:** Nuevo archivo `cloudbuild.yaml` para despliegue automático de Frontend y Backend.
+*   **Artifact Registry:** Añadido repositorio Docker en `modules/data-layer`.

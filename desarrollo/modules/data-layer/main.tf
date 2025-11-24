@@ -35,3 +35,10 @@ resource "google_vertex_ai_index_endpoint" "rag_endpoint" {
     description  = "Endpoint para consultas RAG del ${var.application_display_name}."
     depends_on = [google_vertex_ai_index.rag_index]
 }
+
+resource "google_artifact_registry_repository" "repo" {
+  location      = var.region
+  repository_id = "${var.resource_prefix}-repo"
+  description   = "Docker repository for ${var.application_display_name}"
+  format        = "DOCKER"
+}
